@@ -5,7 +5,8 @@
   inputs.nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
 
   # Flake outputs
-  outputs = { self, nixpkgs }:
+  outputs =
+    { self, nixpkgs }:
     let
       # The systems supported for this flake
       supportedSystems = [
@@ -16,29 +17,38 @@
       ];
 
       # Helper to provide system-specific attributes
-      forEachSupportedSystem = f: nixpkgs.lib.genAttrs supportedSystems (system: f {
-        pkgs = import nixpkgs { inherit system; };
-      });
+      forEachSupportedSystem =
+        f:
+        nixpkgs.lib.genAttrs supportedSystems (
+          system:
+          f {
+            pkgs = import nixpkgs { inherit system; };
+          }
+        );
     in
     {
-      devShells = forEachSupportedSystem ({ pkgs }: let
-        inherit (pkgs) mkShell;
-        inherit (pkgs.lib) getExe;
-        onefetch = getExe pkgs.onefetch;
-      in {
-        default = mkShell {
-          # The Nix packages provided in the environment
-          # Add any you need here
-          packages = [ pkgs.hello ];
+      devShells = forEachSupportedSystem (
+        { pkgs }:
+        let
+          inherit (pkgs) mkShell;
+          inherit (pkgs.lib) getExe;
+          onefetch = getExe pkgs.onefetch;
+        in
+        {
+          default = mkShell {
+            # The Nix packages provided in the environment
+            # Add any you need here
+            packages = [ pkgs.hello ];
 
-          # Set any environment variables for your dev shell
-          env = { };
+            # Set any environment variables for your dev shell
+            env = { };
 
-          # Add any shell logic you want executed any time the environment is activated
-          shellHook = ''
-            ${onefetch} --no-bots 2>/dev/null
-          '';
-        };
-      });
+            # Add any shell logic you want executed any time the environment is activated
+            shellHook = ''
+              ${onefetch} --no-bots 2>/dev/null
+            '';
+          };
+        }
+      );
     };
 }

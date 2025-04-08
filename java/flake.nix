@@ -3,14 +3,28 @@
 
   inputs.nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
 
-  outputs = { self, nixpkgs }:
+  outputs =
+    { self, nixpkgs }:
     let
       javaVersion = 23; # Change this value to update the whole stack
 
-      supportedSystems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
-      forEachSupportedSystem = f: nixpkgs.lib.genAttrs supportedSystems (system: f {
-        pkgs = import nixpkgs { inherit system; overlays = [ self.overlays.default ]; };
-      });
+      supportedSystems = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "x86_64-darwin"
+        "aarch64-darwin"
+      ];
+      forEachSupportedSystem =
+        f:
+        nixpkgs.lib.genAttrs supportedSystems (
+          system:
+          f {
+            pkgs = import nixpkgs {
+              inherit system;
+              overlays = [ self.overlays.default ];
+            };
+          }
+        );
     in
     {
       overlays.default =
@@ -25,34 +39,38 @@
           lombok = prev.lombok.override { inherit jdk; };
         };
 
-      devShells = forEachSupportedSystem ({ pkgs }: let
-        inherit (pkgs) mkShell;
-        inherit (pkgs.lib) getExe;
-        inherit (pkgs) gradle maven;
-        onefetch = getExe pkgs.onefetch;
-      in {
-        default = mkShell {
-          packages = [
-            gradle
-            maven
+      devShells = forEachSupportedSystem (
+        { pkgs }:
+        let
+          inherit (pkgs) mkShell;
+          inherit (pkgs.lib) getExe;
+          inherit (pkgs) gradle maven;
+          onefetch = getExe pkgs.onefetch;
+        in
+        {
+          default = mkShell {
+            packages = [
+              gradle
+              maven
 
-            pkgs.gcc
-            pkgs.jdk
-            pkgs.ncurses
-            pkgs.patchelf
-            pkgs.zlib
-          ];
+              pkgs.gcc
+              pkgs.jdk
+              pkgs.ncurses
+              pkgs.patchelf
+              pkgs.zlib
+            ];
 
-          shellHook =
-            let
-              loadLombok = "-javaagent:${pkgs.lombok}/share/java/lombok.jar";
-              prev = "\${JAVA_TOOL_OPTIONS:+ $JAVA_TOOL_OPTIONS}";
-            in
-            ''
-              export JAVA_TOOL_OPTIONS="${loadLombok}${prev}"
-              ${onefetch} --no-bots 2>/dev/null
-            '';
-        };
-      });
+            shellHook =
+              let
+                loadLombok = "-javaagent:${pkgs.lombok}/share/java/lombok.jar";
+                prev = "\${JAVA_TOOL_OPTIONS:+ $JAVA_TOOL_OPTIONS}";
+              in
+              ''
+                export JAVA_TOOL_OPTIONS="${loadLombok}${prev}"
+                ${onefetch} --no-bots 2>/dev/null
+              '';
+          };
+        }
+      );
     };
 }

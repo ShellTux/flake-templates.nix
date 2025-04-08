@@ -5,7 +5,8 @@
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
   };
 
-  outputs = { self, nixpkgs }:
+  outputs =
+    { self, nixpkgs }:
     let
       supportedSystems = [
         "x86_64-linux"
@@ -14,11 +15,17 @@
         "aarch64-darwin"
       ];
 
-      forEachSupportedSystem = f: nixpkgs.lib.genAttrs supportedSystems (system: f {
-        pkgs = import nixpkgs { inherit system; };
-      });
+      forEachSupportedSystem =
+        f:
+        nixpkgs.lib.genAttrs supportedSystems (
+          system:
+          f {
+            pkgs = import nixpkgs { inherit system; };
+          }
+        );
 
-      scriptDrvs = forEachSupportedSystem ({ pkgs }:
+      scriptDrvs = forEachSupportedSystem (
+        { pkgs }:
         let
           getSystem = "SYSTEM=$(nix eval --impure --raw --expr 'builtins.currentSystem')";
           forEachDir = exec: ''
@@ -47,25 +54,32 @@
               nix flake update
             '';
           };
-        });
+        }
+      );
     in
     {
-      devShells = forEachSupportedSystem ({ pkgs }: let
-        inherit (pkgs) system mkShell;
-        inherit (pkgs.lib) getExe;
-        onefetch = getExe pkgs.onefetch;
-      in {
-        default = mkShell {
-          packages = with scriptDrvs.${system}; [
-            check
-            update
-          ];
+      formatter = forEachSupportedSystem ({ pkgs }: pkgs.nixfmt-tree);
 
-          shellHook = ''
-            ${onefetch} --no-bots 2>/dev/null
-          '';
-        };
-      });
+      devShells = forEachSupportedSystem (
+        { pkgs }:
+        let
+          inherit (pkgs) system mkShell;
+          inherit (pkgs.lib) getExe;
+          onefetch = getExe pkgs.onefetch;
+        in
+        {
+          default = mkShell {
+            packages = with scriptDrvs.${system}; [
+              check
+              update
+            ];
+
+            shellHook = ''
+              ${onefetch} --no-bots 2>/dev/null
+            '';
+          };
+        }
+      );
 
       templates = rec {
         default = empty;
@@ -102,14 +116,14 @@
           path = ./rust;
           description = "Rust development enviroment";
           welcomeText = ''
-      # Simple Rust/Cargo Template
-      ## Intended usage
-            The intended usage of this flake is...
+            # Simple Rust/Cargo Template
+            ## Intended usage
+                  The intended usage of this flake is...
 
-      ## More info
-            - [Rust language](https://www.rust-lang.org/)
-            - [Rust on the NixOS Wiki](https://nixos.wiki/wiki/Rust)
-            - ...
+            ## More info
+                  - [Rust language](https://www.rust-lang.org/)
+                  - [Rust on the NixOS Wiki](https://nixos.wiki/wiki/Rust)
+                  - ...
           '';
         };
 
