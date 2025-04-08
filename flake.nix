@@ -131,6 +131,61 @@
           '';
         };
 
+        latex = {
+          path = ./latex;
+          description = "LaTeX development environment";
+          welcomeText = ''
+            # LaTeX Development environment
+
+            ## More info
+              - [LaTeX](https://www.latex-project.org/)
+              - [TexLive](https://wiki.nixos.org/wiki/TexLive)
+          '';
+        };
+
+        matlab = {
+          path = ./matlab;
+          description = "MATLAB development environment";
+          welcomeText = ''
+            # MATLAB Development environment
+
+            ## More info
+              - [MATLAB](https://www.mathworks.com/products/matlab.html)
+              - [MATLAB on the NixOS Wiki](https://nixos.wiki/wiki/Matlab)
+              - [nix-matlab](https://gitlab.com/doronbehar/nix-matlab)
+              - Note: Use a valid license for MATLAB.
+          '';
+        };
+
+        matlab-octave = {
+          path = ./matlab-octave;
+          description = "MATLAB/Octave development environment";
+          welcomeText = ''
+            # MATLAB/Octave Development environment
+
+            ## More info
+              - This environment supports both MATLAB and Octave.
+              - [MATLAB](https://www.mathworks.com/products/matlab.html)
+              - [MATLAB on the NixOS Wiki](https://nixos.wiki/wiki/Matlab)
+              - [nix-matlab](https://gitlab.com/doronbehar/nix-matlab)
+              - [Octave](https://octave.org)
+              - Note: Use a valid license for MATLAB.
+          '';
+        };
+
+        octave = {
+          path = ./octave;
+          description = "Octave development environment";
+          welcomeText = ''
+            # Octave Development environment
+
+            ## More info
+              - [Octave language](https://octave.org)
+          '';
+        };
+
+        octave-matlab = matlab-octave;
+
         python = {
           path = ./python;
           description = "Python development enviroment";
