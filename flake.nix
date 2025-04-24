@@ -27,32 +27,40 @@
       scriptDrvs = forEachSupportedSystem (
         { pkgs }:
         let
-          getSystem = "SYSTEM=$(nix eval --impure --raw --expr 'builtins.currentSystem')";
-          forEachDir = exec: ''
-            for dir in */; do
-              (
-                cd "''${dir}"
+          inherit (pkgs.lib) getExe;
 
-                ${exec}
-              )
-            done
+          getSystem = "SYSTEM=$(nix eval --impure --raw --expr 'builtins.currentSystem')";
+
+          parallel = getExe (pkgs.parallel-full.override {
+            willCite = true;
+          });
+
+          forEachDir = exec: let
+            inherit (builtins) concatStringsSep;
+
+            exec_statements = concatStringsSep " && " exec;
+          in ''
+            # shellcheck disable=SC2012,SC2016,SC2035
+            ls -1d */ \
+            | ${parallel} --keep-order --group --color --color-failed --jobs 4 \
+            'dir={}; cd "$dir" && ${exec_statements}'
           '';
         in
         {
           check = pkgs.writeShellApplication {
             name = "check";
-            text = forEachDir ''
-              echo "checking ''${dir}"
-              nix flake check --all-systems --no-build
-            '';
+            text = forEachDir [
+              ''echo "checking $dir"''
+              "nix flake check --quiet --all-systems --no-build"
+            ];
           };
 
           update = pkgs.writeShellApplication {
             name = "update";
-            text = forEachDir ''
-              echo "updating ''${dir}"
-              nix flake update
-            '';
+            text = forEachDir [
+              ''echo "updating $dir"''
+              "nix flake update"
+            ];
           };
         }
       );
