@@ -57,22 +57,35 @@
         }
       );
     in
-    {
+    rec {
+      packages = forEachSupportedSystem (
+        { pkgs }:
+        let
+          inherit (pkgs) callPackage;
+        in
+        {
+          create-template = callPackage ./pkgs/create-template { };
+        }
+      );
+
       formatter = forEachSupportedSystem ({ pkgs }: pkgs.nixfmt-tree);
 
       devShells = forEachSupportedSystem (
         { pkgs }:
         let
           inherit (pkgs) system mkShell;
-          inherit (pkgs.lib) getExe;
+          inherit (pkgs.lib) getExe attrValues;
           onefetch = getExe pkgs.onefetch;
         in
         {
           default = mkShell {
-            packages = with scriptDrvs.${system}; [
-              check
-              update
-            ];
+            packages =
+              with scriptDrvs.${system};
+              [
+                check
+                update
+              ]
+              ++ attrValues packages.${system};
 
             shellHook = ''
               ${onefetch} --no-bots 2>/dev/null
