@@ -37,6 +37,7 @@
           inherit (pkgs) mkShell;
           inherit (pkgs) go gotools golangci-lint; # go (version is specified by overlay)
           inherit (pkgs.lib) getExe;
+
           onefetch = getExe pkgs.onefetch;
         in
         {

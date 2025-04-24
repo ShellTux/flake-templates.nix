@@ -63,6 +63,7 @@
           inherit (pkgs.lib) getExe;
           inherit (pkgs) rustToolchain;
           inherit (pkgs.rust.packages.stable.rustPlatform) rustLibSrc;
+
           onefetch = getExe pkgs.onefetch;
         in
         {

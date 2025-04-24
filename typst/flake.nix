@@ -28,6 +28,7 @@
         let
           inherit (pkgs) mkShellNoCC;
           inherit (pkgs.lib) getExe;
+
           onefetch = getExe pkgs.onefetch;
         in
         {

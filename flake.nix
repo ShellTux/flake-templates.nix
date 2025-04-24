@@ -83,6 +83,7 @@
         let
           inherit (pkgs) system mkShell;
           inherit (pkgs.lib) getExe attrValues;
+
           onefetch = getExe pkgs.onefetch;
         in
         {

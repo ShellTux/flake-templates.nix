@@ -27,6 +27,7 @@
         let
           inherit (pkgs) mkShell;
           inherit (pkgs.lib) getExe;
+
           onefetch = getExe pkgs.onefetch;
         in
         {

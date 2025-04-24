@@ -45,6 +45,7 @@
           inherit (pkgs) mkShell;
           inherit (pkgs.lib) getExe;
           inherit (pkgs) gradle maven;
+
           onefetch = getExe pkgs.onefetch;
         in
         {

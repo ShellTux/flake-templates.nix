@@ -58,6 +58,7 @@ cat <<EOF | (set -x; tee "$FLAKE") | bat --style=numbers --pager=never --languag
         let
           inherit (pkgs) mkShellNoCC;
           inherit (pkgs.lib) getExe;
+
           onefetch = getExe pkgs.onefetch;
         in
         {
