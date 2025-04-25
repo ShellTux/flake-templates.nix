@@ -245,6 +245,19 @@
 
         sh = shell;
 
+        typst = {
+          path = ./typst;
+          description = "Typst development enviroment";
+          welcomeText = ''
+            # Typst Development environment
+
+            ## More info
+              - [Typst Github](https://github.com/typst/typst)
+              - [Typst](https://typst.app/)
+              - [Typst Examples Book](https://sitandr.github.io/typst-examples-book/book/)
+          '';
+        };
+
         zig = {
           path = ./zig;
           description = "Zig development enviroment";
