@@ -41,9 +41,10 @@
             exec_statements = concatStringsSep " && " exec;
           in ''
             # shellcheck disable=SC2012,SC2016,SC2035
-            ls -1d */ \
-            | ${parallel} --keep-order --group --color --color-failed --jobs 4 \
-            'dir={}; cd "$dir" && ${exec_statements}'
+            find . -mindepth 2 -maxdepth 2 -type f -name flake.nix -printf '%h\n' \
+              | sort --unique \
+              | ${parallel} --keep-order --group --color --color-failed --jobs 4 \
+                'dir={}; cd "$dir" && ${exec_statements}'
           '';
         in
         {
