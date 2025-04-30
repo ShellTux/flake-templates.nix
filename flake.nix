@@ -52,7 +52,7 @@
             name = "check";
             text = forEachDir [
               ''echo "checking $dir"''
-              "nix flake check --quiet --all-systems --no-build"
+              "(set -x; nix flake check --quiet --all-systems --no-build)"
             ];
           };
 
@@ -60,7 +60,7 @@
             name = "update";
             text = forEachDir [
               ''echo "updating $dir"''
-              "nix flake update"
+              "(set -x; nix flake update)"
             ];
           };
         }
