@@ -3,10 +3,19 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+
+    pre-commit-hooks = {
+      url = "github:cachix/git-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
-    { self, nixpkgs }:
+    {
+      self,
+      nixpkgs,
+      pre-commit-hooks,
+    }:
     let
       supportedSystems = [
         "x86_64-linux"
@@ -20,32 +29,39 @@
         nixpkgs.lib.genAttrs supportedSystems (
           system:
           f {
+            inherit system;
+
             pkgs = import nixpkgs { inherit system; };
           }
         );
 
       scriptDrvs = forEachSupportedSystem (
-        { pkgs }:
+        { pkgs, ... }:
         let
           inherit (pkgs.lib) getExe;
 
           getSystem = "SYSTEM=$(nix eval --impure --raw --expr 'builtins.currentSystem')";
 
-          parallel = getExe (pkgs.parallel-full.override {
-            willCite = true;
-          });
+          parallel = getExe (
+            pkgs.parallel-full.override {
+              willCite = true;
+            }
+          );
 
-          forEachDir = exec: let
-            inherit (builtins) concatStringsSep;
+          forEachDir =
+            exec:
+            let
+              inherit (builtins) concatStringsSep;
 
-            exec_statements = concatStringsSep " && " exec;
-          in ''
-            # shellcheck disable=SC2012,SC2016,SC2035
-            find . -mindepth 2 -maxdepth 2 -type f -name flake.nix -printf '%h\n' \
-              | sort --unique \
-              | ${parallel} --keep-order --group --color --color-failed --jobs 4 \
-                'dir={}; cd "$dir" && ${exec_statements}'
-          '';
+              exec_statements = concatStringsSep " && " exec;
+            in
+            ''
+              # shellcheck disable=SC2012,SC2016,SC2035
+              find . -mindepth 2 -maxdepth 2 -type f -name flake.nix -printf '%h\n' \
+                | sort --unique \
+                | ${parallel} --keep-order --group --color --color-failed --jobs 4 \
+                  'dir={}; cd "$dir" && ${exec_statements}'
+            '';
         in
         {
           check = pkgs.writeShellApplication {
@@ -66,9 +82,9 @@
         }
       );
     in
-    rec {
+    {
       packages = forEachSupportedSystem (
-        { pkgs }:
+        { pkgs, ... }:
         let
           inherit (pkgs) callPackage;
         in
@@ -77,29 +93,53 @@
         }
       );
 
-      formatter = forEachSupportedSystem ({ pkgs }: pkgs.nixfmt-tree);
+      formatter = forEachSupportedSystem ({ pkgs, ... }: pkgs.nixfmt-tree);
+
+      checks = forEachSupportedSystem (
+        { pkgs, system, ... }:
+        {
+          pre-commit-check = pre-commit-hooks.lib.${system}.run {
+            src = ./.;
+            hooks = {
+              nixfmt-rfc-style.enable = true;
+            };
+          };
+        }
+      );
 
       devShells = forEachSupportedSystem (
-        { pkgs }:
+        { pkgs, system, ... }:
         let
-          inherit (pkgs) system mkShell;
+          inherit (pkgs) system mkShellNoCC;
           inherit (pkgs.lib) getExe attrValues;
+          inherit (self.checks."${system}") pre-commit-check;
+          inherit (scriptDrvs."${system}") check update;
+
+          packages = self.packages."${system}";
 
           onefetch = getExe pkgs.onefetch;
         in
         {
-          default = mkShell {
+          default = mkShellNoCC {
             packages =
-              with scriptDrvs.${system};
               [
                 check
                 update
               ]
-              ++ attrValues packages.${system};
+              ++ attrValues packages
+              ++ pre-commit-check.enabledPackages;
 
             shellHook = ''
+              ${pre-commit-check.shellHook}
               ${onefetch} --no-bots 2>/dev/null
             '';
+          };
+
+          ci = mkShellNoCC {
+            packages = [
+              check
+              update
+            ];
           };
         }
       );
