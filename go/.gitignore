@@ -139,3 +139,4 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/linux,windows,macos,vim,visualstudiocode,go
 
 .direnv
+/.pre-commit-config.yaml

@@ -3,8 +3,14 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+
     rust-overlay = {
       url = "github:oxalica/rust-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    pre-commit-hooks = {
+      url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -14,6 +20,7 @@
       self,
       nixpkgs,
       rust-overlay,
+      pre-commit-hooks,
     }:
     let
       supportedSystems = [
@@ -27,6 +34,8 @@
         nixpkgs.lib.genAttrs supportedSystems (
           system:
           f {
+            inherit system;
+
             pkgs = import nixpkgs {
               inherit system;
               overlays = [
@@ -56,13 +65,29 @@
             };
       };
 
+      checks = forEachSupportedSystem (
+        { pkgs, system, ... }:
+        {
+          pre-commit-check = pre-commit-hooks.lib.${system}.run {
+            src = ./.;
+            hooks = {
+              cargo-check.enable = true;
+              clippy.enable = true;
+              nixfmt-rfc-style.enable = true;
+              rustfmt.enable = true;
+            };
+          };
+        }
+      );
+
       devShells = forEachSupportedSystem (
-        { pkgs }:
+        { pkgs, system, ... }:
         let
           inherit (pkgs) mkShell;
           inherit (pkgs.lib) getExe;
           inherit (pkgs) rustToolchain;
           inherit (pkgs.rust.packages.stable.rustPlatform) rustLibSrc;
+          inherit (self.checks."${system}") pre-commit-check;
 
           onefetch = getExe pkgs.onefetch;
         in
@@ -77,7 +102,7 @@
               pkgs.cargo-edit
               pkgs.cargo-watch
               pkgs.rust-analyzer
-            ];
+            ] ++ pre-commit-check.enabledPackages;
 
             env = {
               # Required by rust-analyzer
@@ -85,6 +110,7 @@
             };
 
             shellHook = ''
+              ${pre-commit-check.shellHook}
               ${onefetch} --no-bots 2>/dev/null
             '';
           };
