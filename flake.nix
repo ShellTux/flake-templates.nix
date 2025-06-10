@@ -49,9 +49,12 @@
           );
 
           forEachDir =
-            exec:
+            {
+              exec,
+              jobs ? 4,
+            }:
             let
-              inherit (builtins) concatStringsSep;
+              inherit (builtins) concatStringsSep toString;
 
               exec_statements = concatStringsSep " && " exec;
             in
@@ -59,25 +62,30 @@
               # shellcheck disable=SC2012,SC2016,SC2035
               find . -mindepth 2 -maxdepth 2 -type f -name flake.nix -printf '%h\n' \
                 | sort --unique \
-                | ${parallel} --keep-order --group --color --color-failed --jobs 4 \
+                | ${parallel} --keep-order --group --color --color-failed --jobs ${toString jobs} \
                   'dir={}; cd "$dir" && ${exec_statements}'
             '';
         in
         {
           check = pkgs.writeShellApplication {
             name = "check";
-            text = forEachDir [
-              ''echo "checking $dir"''
-              "(set -x; nix flake check --quiet --all-systems --no-build)"
-            ];
+            text = forEachDir {
+              exec = [
+                ''echo "checking $dir"''
+                "(set -x; nix flake check --quiet --all-systems --no-build)"
+              ];
+            };
           };
 
           update = pkgs.writeShellApplication {
             name = "update";
-            text = forEachDir [
-              ''echo "updating $dir"''
-              "(set -x; nix flake update)"
-            ];
+            text = forEachDir {
+              exec = [
+                ''echo "updating $dir"''
+                "(set -x; nix flake update)"
+              ];
+              jobs = 1;
+            };
           };
         }
       );
