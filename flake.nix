@@ -273,6 +273,22 @@
           '';
         };
 
+        rust-crane = {
+          path = ./rust-crane;
+          description = "Rust development enviroment with crane for caching dependencies";
+          welcomeText = ''
+            # Rust Development environment
+
+            ## More info
+                  - [Rust language](https://www.rust-lang.org/)
+                  - [Rust on the NixOS Wiki](https://nixos.wiki/wiki/Rust)
+
+            You can:
+              1. `rm -r src/ Cargo.toml Cargo.lock`
+              2. `cargo init`
+          '';
+        };
+
         shell = {
           path = ./shell;
           description = "Shell development enviroment";
