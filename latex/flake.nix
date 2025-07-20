@@ -28,14 +28,24 @@
           inherit (pkgs) mkShell;
           inherit (pkgs.lib) getExe;
 
+          tex = pkgs.texlive.combine {
+            inherit (pkgs.texlive)
+              scheme-basic
+              booktabs
+              fancyvrb
+              footnotehyper
+              xcolor
+              ;
+          };
+
           onefetch = getExe pkgs.onefetch;
         in
         {
           default = mkShell {
             packages = [
-              pkgs.texlive.combined.scheme-full
-              pkgs.texlab
               pkgs.tectonic
+              pkgs.texlab
+              tex
             ];
 
             shellHook = ''
