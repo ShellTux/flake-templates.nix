@@ -33,7 +33,6 @@
             octavePackages.audio
             octavePackages.image
             octavePackages.linear-algebra
-            octavePackages.ltfat
             octavePackages.matgeom
             octavePackages.signal
             octavePackages.statistics
