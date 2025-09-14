@@ -105,6 +105,9 @@
 
       checks = forEachSupportedSystem (
         { pkgs, system, ... }:
+        let
+          inherit (scriptDrvs."${system}") check;
+        in
         {
           pre-commit-check = pre-commit-hooks.lib.${system}.run {
             src = ./.;
@@ -112,6 +115,8 @@
               nixfmt-rfc-style.enable = true;
             };
           };
+
+          check-templates = check;
         }
       );
 
