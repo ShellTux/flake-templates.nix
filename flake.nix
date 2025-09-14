@@ -145,6 +145,15 @@
             shellHook = ''
               ${pre-commit-check.shellHook}
               ${onefetch} --no-bots 2>/dev/null
+              printf '%s' '${
+                [ "This DevShell provides the following packages: " ]
+                ++ (
+                  self.devShells.${system}.default.nativeBuildInputs
+                  |> builtins.map (p: p.meta.mainProgram)
+                  |> builtins.map (program: " - ${program}")
+                )
+                |> builtins.concatStringsSep "\n"
+              }'
             '';
           };
 
