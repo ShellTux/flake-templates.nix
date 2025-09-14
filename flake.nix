@@ -114,6 +114,16 @@
             src = ./.;
             hooks = {
               nixfmt-rfc-style.enable = true;
+
+              check = {
+                enable = true;
+
+                name = "check templates";
+                entry = getExe check;
+                language = "system";
+                pass_filenames = false;
+                stages = [ "pre-push" ];
+              };
             };
           };
 
