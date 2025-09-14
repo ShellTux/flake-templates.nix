@@ -106,6 +106,7 @@
       checks = forEachSupportedSystem (
         { pkgs, system, ... }:
         let
+          inherit (pkgs.lib) getExe;
           inherit (scriptDrvs."${system}") check;
         in
         {
@@ -329,6 +330,9 @@
           description = "Typst development enviroment";
           welcomeText = ''
             # Typst Development environment
+
+            Some examples are provided in the examples/ directory, you can
+            delete them if you want
 
             ## More info
               - [Typst Github](https://github.com/typst/typst)
