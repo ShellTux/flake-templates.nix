@@ -88,5 +88,23 @@
               };
         }
       );
+
+      packages = forEachSupportedSystem (
+        { pkgs, system, ... }:
+        let
+          inherit (pkgs.stdenv) mkDerivation;
+        in
+        {
+          default = mkDerivation {
+            name = "c-cpp";
+            src = ./.;
+
+            installPhase = ''
+              mkdir --parents $out/bin
+              cp target/release/* $out/bin
+            '';
+          };
+        }
+      );
     };
 }
