@@ -153,19 +153,22 @@
               ++ attrValues packages
               ++ pre-commit-check.enabledPackages;
 
-            shellHook = ''
-              ${pre-commit-check.shellHook}
-              ${onefetch} --no-bots 2>/dev/null
-              printf '%s' '${
-                [ "This DevShell provides the following packages: " ]
-                ++ (
-                  self.devShells.${system}.default.nativeBuildInputs
-                  |> builtins.map (p: p.meta.mainProgram)
-                  |> builtins.map (program: " - ${program}")
-                )
-                |> builtins.concatStringsSep "\n"
-              }'
-            '';
+            shellHook =
+              let
+                inherit (builtins) concatStringsSep map;
+
+                pkgsMsg = concatStringsSep "" (
+                  [ "This DevShell provides the following packages:\n" ]
+                  ++ (map (program: " - ${program}\n") (
+                    map (p: p.meta.mainProgram) self.devShells.${system}.default.nativeBuildInputs
+                  ))
+                );
+              in
+              ''
+                ${pre-commit-check.shellHook}
+                ${onefetch} --no-bots 2>/dev/null
+                printf '%s' '${pkgsMsg}'
+              '';
           };
 
           ci = mkShellNoCC {
