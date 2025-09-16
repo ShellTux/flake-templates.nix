@@ -64,7 +64,24 @@
 
           additionalPackages = attrValues (filterAttrs (key: value: (elem key [ ])) config.packages);
 
-          craneLib = crane.mkLib pkgs;
+          rustToolchain =
+            let
+              inherit (builtins) pathExists;
+
+              rust = pkgs.rust-bin;
+            in
+            if pathExists ./rust-toolchain.toml then
+              rust.fromRustupToolchainFile ./rust-toolchain.toml
+            else if pathExists ./rust-toolchain then
+              rust.fromRustupToolchainFile ./rust-toolchain
+            else
+              rust.stable.latest.default.override {
+                extensions = [
+                  "rust-src"
+                  "rustfmt"
+                ];
+              };
+          craneLib = (crane.mkLib pkgs).overrideToolchain rustToolchain;
 
           inherit (craneLib)
             buildPackage

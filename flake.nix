@@ -322,6 +322,7 @@
             You can:
               1. `rm -r src/ Cargo.toml Cargo.lock`
               2. `cargo init`
+              3. (Optional) add rust-toolchain.toml file to customize cargo toolchain
           '';
         };
 
