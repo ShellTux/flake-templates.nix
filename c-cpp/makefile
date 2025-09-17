@@ -57,11 +57,11 @@ run: $(TARGETS)
 .PHONY: r
 r: run
 
-$(BUILD_DIR)/%.o: src/%.cpp
+$(BUILD_DIR)/%.o: %.cpp
 	@mkdir --parents $(shell dirname $@)
 	$(CXX) $(CXXFLAGS) -MMD -MF $(@:.o=.d) -c -o $@ $<
 
-$(BUILD_DIR)/%.o: src/%.c
+$(BUILD_DIR)/%.o: %.c
 	@mkdir --parents $(shell dirname $@)
 	$(CC) $(CFLAGS) -MMD -MF $(@:.o=.d) -c -o $@ $<
 

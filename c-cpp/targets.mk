@@ -3,13 +3,11 @@ TARGETS = \
 					$(TARGET_DIR)/cpp-example
 
 DEPS := src/c-example.c src/example.c
-DEPS := $(DEPS:src/%.c=$(BUILD_DIR)/%.o)
-$(TARGET_DIR)/c-example: $(DEPS)
+$(TARGET_DIR)/c-example: $(DEPS:%.c=$(BUILD_DIR)/%.o)
 	@mkdir --parents $(shell dirname $@)
 	$(CC) -o $@ $^ $(LDFLAGS)
 
 DEPS := src/cpp-example.cpp
-DEPS := $(DEPS:src/%.cpp=$(BUILD_DIR)/%.o)
-$(TARGET_DIR)/cpp-example: $(DEPS)
+$(TARGET_DIR)/cpp-example: $(DEPS:%.cpp=$(BUILD_DIR)/%.o)
 	@mkdir --parents $(shell dirname $@)
 	$(CXX) -o $@ $^ $(LDFLAGS)
