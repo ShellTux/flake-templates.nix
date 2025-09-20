@@ -34,6 +34,7 @@ nix flake new --template github:ShellTux/flake-templates.nix#<ENV> <PROJECT_NAME
 | [Octave]                         | [`octave`](./octave/)                 |
 | [Python]                         | [`python`](./python/)                 |
 | [Rust]                           | [`rust`](./rust/)                     |
+| [Rust with crane]                | [`rust-crane`](./rust-crane/)         |
 | [Shell]                          | [`shell`](./shell/)                   |
 | [Zig]                            | [`zig`](./zig/)                       |
 
