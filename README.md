@@ -24,6 +24,7 @@ nix flake new --template github:ShellTux/flake-templates.nix#<ENV> <PROJECT_NAME
 | Language/framework/tool          | Template                              |
 | :------------------------------- | :------------------------------------ |
 | [C]/[C++]                        | [`c-cpp`](./c-cpp/)                   |
+| [C]/[C++]/[Rust]                 | [`c-cpp-rust`](./c-cpp-rust/)         |
 | Empty (change at will)           | [`empty`](./empty)                    |
 | [Go]                             | [`go`](./go/)                         |
 | [Java]                           | [`java`](./java/)                     |

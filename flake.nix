@@ -200,6 +200,28 @@
         c = c-cpp;
         cpp = c-cpp;
 
+        c-cpp-rust = {
+          path = ./c-cpp-rust;
+          description = "C/C++/Rust development enviroment";
+          welcomeText = ''
+            # C/C++/Rust Development environment
+
+            ## More info
+              - [C language](https://en.wikipedia.org/wiki/C_(programming_language))
+              - [C++ language](https://en.wikipedia.org/wiki/C%2B%2B)
+              - [C/C++ on the NixOS Wiki](https://nixos.wiki/wiki/C)
+              - [C/C++ reference](https://en.cppreference.com/w/c)
+              - [Rust language](https://www.rust-lang.org/)
+              - [Rust on the NixOS Wiki](https://nixos.wiki/wiki/Rust)
+
+            You can:
+              1. `rm Cargo.toml Cargo.lock`
+              2. `cargo init`
+              3. `make`
+              4. (Optional) add rust-toolchain.toml file to customize cargo toolchain
+          '';
+        };
+
         empty = {
           path = ./empty;
           description = "Empty dev template that you can customize at will";
