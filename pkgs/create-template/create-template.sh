@@ -77,7 +77,8 @@ EOF
 
 GITIGNORE="$TEMPLATE/.gitignore"
 cat <<EOF | (set -x; tee "$GITIGNORE") | bat --style=numbers --pager=never --language=gitignore
-.direnv
+/.direnv
+/.pre-commit-config.yaml
 EOF
 
 echo "Template $TEMPLATE created"
