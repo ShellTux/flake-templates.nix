@@ -69,6 +69,23 @@ $(BUILD_DIR)/%.o: %.c
 clean:
 	rm --force --recursive $(BUILD_DIR) $(TARGET_DIR)
 
+.PHONY: help
+help:
+	@echo Examples:
+	@echo '$$ make -j4                # Compile all targets in all modes'
+	@echo '$$ make MODE=DEBUG build   # Build debug targets'
+	@echo '$$ make MODE=DEBUG b       # Build debug targets'
+	@echo '$$ make MODE=RELEASE build # Build release targets'
+	@echo '$$ make MODE=RELEASE b     # Build release targets'
+	@echo '$$ make r                  # Run all targets'
+	@echo '$$ make run                # Run all targets'
+	@echo '$$ make MODE=DEBUG r       # Run debug targets'
+	@echo '$$ make MODE=DEBUG run     # Run debug targets'
+	@echo '$$ make MODE=RELEASE r     # Run release targets'
+	@echo '$$ make MODE=RELEASE r     # Run release targets'
+	@echo '$$ make clean              # Clean intermidiate files'
+	@echo '$$ make vars               # Print vars'
+
 .PHONY: vars
 vars:
 	@echo BUILD_DIR=$(BUILD_DIR)
