@@ -194,6 +194,17 @@
               - [C++ language](https://en.wikipedia.org/wiki/C%2B%2B)
               - [C/C++ on the NixOS Wiki](https://nixos.wiki/wiki/C)
               - [C/C++ reference](https://en.cppreference.com/w/c)
+
+            For the C/C++ codebase:
+
+              - debug.mk: Defines compiler flags and output dirs for debug targets
+              - release.mk: Defines compiler flags and output dirs for release targets
+              - targets.mk: Defines how to build the targets independent of mode
+
+            ```sh
+            make help
+            make -j4 # Compile C/C++ code
+            ```
           '';
         };
 
@@ -214,11 +225,24 @@
               - [Rust language](https://www.rust-lang.org/)
               - [Rust on the NixOS Wiki](https://nixos.wiki/wiki/Rust)
 
-            You can:
-              1. `rm Cargo.toml Cargo.lock`
-              2. `cargo init`
-              3. `make`
-              4. (Optional) add rust-toolchain.toml file to customize cargo toolchain
+            First regenerate cargo files to reflect repo name:
+
+            ```sh
+            $ rm Cargo.toml Cargo.lock
+            $ cargo init
+            $ touch rust-toolchain.toml # Optional, if you want to customize cargo toolchain
+            ```
+
+            For the C/C++ codebase:
+
+              - debug.mk: Defines compiler flags and output dirs for debug targets
+              - release.mk: Defines compiler flags and output dirs for release targets
+              - targets.mk: Defines how to build the targets independent of mode
+
+            ```sh
+            make help
+            make -j4 # Compile C/C++ code
+            ```
           '';
         };
 
@@ -341,10 +365,13 @@
                   - [Rust language](https://www.rust-lang.org/)
                   - [Rust on the NixOS Wiki](https://nixos.wiki/wiki/Rust)
 
-            You can:
-              1. `rm -r src/ Cargo.toml Cargo.lock`
-              2. `cargo init`
-              3. (Optional) add rust-toolchain.toml file to customize cargo toolchain
+            First regenerate cargo files to reflect repo name:
+
+            ```sh
+            $ rm Cargo.toml Cargo.lock
+            $ cargo init
+            $ touch rust-toolchain.toml # Optional, if you want to customize cargo toolchain
+            ```
           '';
         };
 
