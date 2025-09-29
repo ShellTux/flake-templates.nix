@@ -50,16 +50,25 @@
         in
         {
           default = mkShell {
-            packages = [
-              gradle
-              maven
+            packages =
+              [
+                gradle
+                maven
 
-              pkgs.gcc
-              pkgs.jdk
-              pkgs.ncurses
-              pkgs.patchelf
-              pkgs.zlib
-            ];
+                pkgs.gcc
+                pkgs.jdk
+                pkgs.ncurses
+                pkgs.patchelf
+                pkgs.zlib
+              ]
+              ++ [
+                pkgs.entr
+                pkgs.fd
+                pkgs.jq
+                pkgs.ripgrep
+                pkgs.ripgrep-all
+                pkgs.tokei
+              ];
 
             shellHook =
               let

@@ -86,21 +86,30 @@
               ${onefetch} --no-bots 2>/dev/null
             '';
 
-            packages = [
-              python.pkgs.venvShellHook
-              python.pkgs.pip
+            packages =
+              [
+                python.pkgs.venvShellHook
+                python.pkgs.pip
 
-              # Add whatever else you'd like here.
-              # pkgs.basedpyright
+                # Add whatever else you'd like here.
+                # pkgs.basedpyright
 
-              # pkgs.black
-              # or
-              # python.pkgs.black
+                # pkgs.black
+                # or
+                # python.pkgs.black
 
-              # pkgs.ruff
-              # or
-              # python.pkgs.ruff
-            ];
+                # pkgs.ruff
+                # or
+                # python.pkgs.ruff
+              ]
+              ++ [
+                pkgs.entr
+                pkgs.fd
+                pkgs.jq
+                pkgs.ripgrep
+                pkgs.ripgrep-all
+                pkgs.tokei
+              ];
           };
         }
       );

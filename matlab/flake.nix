@@ -49,11 +49,20 @@
         in
         {
           default = mkShell {
-            packages = [
-              nix-matlab.packages.matlab
-              nix-matlab.packages.matlab-mex
-              nix-matlab.packages.matlab-mlint
-            ];
+            packages =
+              [
+                nix-matlab.packages.matlab
+                nix-matlab.packages.matlab-mex
+                nix-matlab.packages.matlab-mlint
+              ]
+              ++ [
+                pkgs.entr
+                pkgs.fd
+                pkgs.jq
+                pkgs.ripgrep
+                pkgs.ripgrep-all
+                pkgs.tokei
+              ];
 
             shellHook = ''
               ${nix-matlab.shellHooksCommon}

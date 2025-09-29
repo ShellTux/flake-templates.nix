@@ -70,15 +70,25 @@
         in
         {
           default = mkShell {
-            packages = [
-              go
+            packages =
+              [
+                go
 
-              # goimports, godoc, etc.
-              gotools
+                # goimports, godoc, etc.
+                gotools
 
-              # https://github.com/golangci/golangci-lint
-              golangci-lint
-            ] ++ pre-commit-check.enabledPackages;
+                # https://github.com/golangci/golangci-lint
+                golangci-lint
+              ]
+              ++ [
+                pkgs.entr
+                pkgs.fd
+                pkgs.jq
+                pkgs.ripgrep
+                pkgs.ripgrep-all
+                pkgs.tokei
+              ]
+              ++ pre-commit-check.enabledPackages;
 
             shellHook = ''
               ${pre-commit-check.shellHook}

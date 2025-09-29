@@ -32,11 +32,20 @@
         in
         {
           default = mkShell {
-            packages = [
-              pkgs.zig
-              pkgs.zls
-              pkgs.lldb
-            ];
+            packages =
+              [
+                pkgs.zig
+                pkgs.zls
+                pkgs.lldb
+              ]
+              ++ [
+                pkgs.entr
+                pkgs.fd
+                pkgs.jq
+                pkgs.ripgrep
+                pkgs.ripgrep-all
+                pkgs.tokei
+              ];
 
             shellHook = ''
               ${onefetch} --no-bots 2>/dev/null

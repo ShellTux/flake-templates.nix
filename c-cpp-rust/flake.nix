@@ -209,6 +209,14 @@
                         pkgs.cargo-watch
                         pkgs.rust-analyzer
                       ]
+                      ++ [
+                        pkgs.entr
+                        pkgs.fd
+                        pkgs.jq
+                        pkgs.ripgrep
+                        pkgs.ripgrep-all
+                        pkgs.tokei
+                      ]
                       ++ additionalPackages;
 
                     env = {

@@ -93,16 +93,26 @@
         in
         {
           default = mkShell {
-            packages = [
-              rustToolchain
+            packages =
+              [
+                rustToolchain
 
-              pkgs.openssl
-              pkgs.pkg-config
-              pkgs.cargo-deny
-              pkgs.cargo-edit
-              pkgs.cargo-watch
-              pkgs.rust-analyzer
-            ] ++ pre-commit-check.enabledPackages;
+                pkgs.openssl
+                pkgs.pkg-config
+                pkgs.cargo-deny
+                pkgs.cargo-edit
+                pkgs.cargo-watch
+                pkgs.rust-analyzer
+              ]
+              ++ [
+                pkgs.entr
+                pkgs.fd
+                pkgs.jq
+                pkgs.ripgrep
+                pkgs.ripgrep-all
+                pkgs.tokei
+              ]
+              ++ pre-commit-check.enabledPackages;
 
             env = {
               # Required by rust-analyzer

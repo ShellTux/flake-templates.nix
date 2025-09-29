@@ -32,7 +32,16 @@
         in
         {
           default = mkShell {
-            packages = [ pkgs.shellcheck ];
+            packages =
+              [ pkgs.shellcheck ]
+              ++ [
+                pkgs.entr
+                pkgs.fd
+                pkgs.jq
+                pkgs.ripgrep
+                pkgs.ripgrep-all
+                pkgs.tokei
+              ];
 
             shellHook = ''
               ${onefetch} --no-bots 2>/dev/null

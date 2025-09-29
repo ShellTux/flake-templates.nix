@@ -61,14 +61,24 @@
         in
         {
           default = mkShellNoCC {
-            packages = [
-              pkgs.tinymist
-              pkgs.typst
-              pkgs.typstfmt
-              pkgs.typst-live
-              pkgs.typstwriter
-              pkgs.typstyle
-            ] ++ pre-commit-check.enabledPackages;
+            packages =
+              [
+                pkgs.tinymist
+                pkgs.typst
+                pkgs.typstfmt
+                pkgs.typst-live
+                pkgs.typstwriter
+                pkgs.typstyle
+              ]
+              ++ [
+                pkgs.entr
+                pkgs.fd
+                pkgs.jq
+                pkgs.ripgrep
+                pkgs.ripgrep-all
+                pkgs.tokei
+              ]
+              ++ pre-commit-check.enabledPackages;
 
             shellHook = ''
               ${pre-commit-check.shellHook}

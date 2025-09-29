@@ -181,15 +181,25 @@
             in
             {
               default = craneLib.devShell {
-                packages = [
-                  pkgs.openssl
-                  pkgs.pkg-config
-                  pkgs.cargo-deny
-                  pkgs.cargo-edit
-                  pkgs.cargo-nextest
-                  pkgs.cargo-watch
-                  pkgs.rust-analyzer
-                ] ++ additionalPackages;
+                packages =
+                  [
+                    pkgs.openssl
+                    pkgs.pkg-config
+                    pkgs.cargo-deny
+                    pkgs.cargo-edit
+                    pkgs.cargo-nextest
+                    pkgs.cargo-watch
+                    pkgs.rust-analyzer
+                  ]
+                  ++ [
+                    pkgs.entr
+                    pkgs.fd
+                    pkgs.jq
+                    pkgs.ripgrep
+                    pkgs.ripgrep-all
+                    pkgs.tokei
+                  ]
+                  ++ additionalPackages;
 
                 env = {
                   # Required by rust-analyzer

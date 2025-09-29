@@ -79,6 +79,14 @@
                     pkgs.vcpkg-tool
                   ]
                   ++ (if system == "aarch64-darwin" then [ ] else [ pkgs.gdb ])
+                  ++ [
+                    pkgs.entr
+                    pkgs.fd
+                    pkgs.jq
+                    pkgs.ripgrep
+                    pkgs.ripgrep-all
+                    pkgs.tokei
+                  ]
                   ++ pre-commit-check.enabledPackages;
 
                 shellHook = ''

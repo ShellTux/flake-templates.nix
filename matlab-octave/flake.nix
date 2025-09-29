@@ -68,6 +68,14 @@
                 nix-matlab.packages.matlab
                 nix-matlab.packages.matlab-mex
                 nix-matlab.packages.matlab-mlint
+              ]
+              ++ [
+                pkgs.entr
+                pkgs.fd
+                pkgs.jq
+                pkgs.ripgrep
+                pkgs.ripgrep-all
+                pkgs.tokei
               ];
 
             shellHook = ''

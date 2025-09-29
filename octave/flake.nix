@@ -43,7 +43,16 @@
         in
         {
           default = mkShell {
-            packages = [ octave ];
+            packages =
+              [ octave ]
+              ++ [
+                pkgs.entr
+                pkgs.fd
+                pkgs.jq
+                pkgs.ripgrep
+                pkgs.ripgrep-all
+                pkgs.tokei
+              ];
 
             shellHook = ''
               ${onefetch} --no-bots 2>/dev/null

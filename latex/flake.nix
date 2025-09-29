@@ -42,11 +42,20 @@
         in
         {
           default = mkShell {
-            packages = [
-              pkgs.tectonic
-              pkgs.texlab
-              tex
-            ];
+            packages =
+              [
+                pkgs.tectonic
+                pkgs.texlab
+                tex
+              ]
+              ++ [
+                pkgs.entr
+                pkgs.fd
+                pkgs.jq
+                pkgs.ripgrep
+                pkgs.ripgrep-all
+                pkgs.tokei
+              ];
 
             shellHook = ''
               ${onefetch} --no-bots 2>/dev/null
