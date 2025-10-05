@@ -11,10 +11,16 @@ all:
 	$(MAKE) --no-print-directory MODE=RELEASE build
 
 CFLAGS += -Wall -Wextra -Werror
+CFLAGS += -Wno-error=unused-parameter
+CFLAGS += -Wno-error=unused-variable
+CFLAGS += -Wno-error=unused-but-set-variable
 CFLAGS += -I$(INCLUDE_DIR)
 CFLAGS += -std=c99
 
 CXXFLAGS += -Wall -Wextra -Werror
+CXXFLAGS += -Wno-error=unused-parameter
+CXXFLAGS += -Wno-error=unused-variable
+CXXFLAGS += -Wno-error=unused-but-set-variable
 CXXFLAGS += -I$(INCLUDE_DIR)
 CXXFLAGS += -std=c++17
 
@@ -85,6 +91,7 @@ help:
 	@echo '$$ make MODE=RELEASE r     # Run release targets'
 	@echo '$$ make clean              # Clean intermidiate files'
 	@echo '$$ make vars               # Print vars'
+	@echo '$$ make MODE=RELEASE compile_flags.txt # Regenerate compile_flags.txt for clangd'
 
 .PHONY: vars
 vars:
@@ -98,3 +105,7 @@ vars:
 	@echo LDFLAGS=$(LDFLAGS)
 	@echo MODE=$(MODE)
 	@echo TARGETS=$(TARGETS)
+
+.PHONY: compile_flags.txt
+compile_flags.txt:
+	@echo $(CFLAGS) | tr ' ' '\n' | tee $@

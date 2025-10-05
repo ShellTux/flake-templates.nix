@@ -1,1 +1,8 @@
---include-directory=include
+-Wall
+-Wextra
+-Werror
+-Wno-error=unused-parameter
+-Wno-error=unused-variable
+-Wno-error=unused-but-set-variable
+-Iinclude
+-std=c99
