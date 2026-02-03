@@ -264,6 +264,18 @@
 
         };
 
+        haskell = {
+          path = ./haskell;
+          description = "Haskell development enviroment";
+          welcomeText = ''
+            # Haskell Development environment
+
+            ## More info
+              - [Haskell Language](https://www.haskell.org/)
+          '';
+
+        };
+
         java = {
           path = ./java;
           description = "Java development enviroment";
