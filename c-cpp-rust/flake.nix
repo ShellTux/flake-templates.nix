@@ -142,7 +142,7 @@
             check-toml.enable = true;
             clang-format.enable = true;
             clippy.enable = true;
-            nixfmt-rfc-style.enable = true;
+            nixfmt.enable = true;
             rustfmt.enable = true;
           };
 

@@ -52,7 +52,7 @@
             hooks = {
               gofmt.enable = true;
               gotest.enable = true;
-              nixfmt-rfc-style.enable = true;
+              nixfmt.enable = true;
             };
           };
         }

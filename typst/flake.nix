@@ -42,8 +42,7 @@
           pre-commit-check = pre-commit-hooks.lib.${system}.run {
             src = ./.;
             hooks = {
-              nixfmt-rfc-style.enable = true;
-              typstfmt.enable = true;
+              nixfmt.enable = true;
               typstyle.enable = true;
             };
           };
@@ -65,7 +64,6 @@
               [
                 pkgs.tinymist
                 pkgs.typst
-                pkgs.typstfmt
                 pkgs.typst-live
                 pkgs.typstwriter
                 pkgs.typstyle

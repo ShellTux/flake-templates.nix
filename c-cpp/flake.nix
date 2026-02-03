@@ -42,7 +42,7 @@
             src = ./.;
             hooks = {
               clang-format.enable = true;
-              nixfmt-rfc-style.enable = true;
+              nixfmt.enable = true;
             };
           };
         }
