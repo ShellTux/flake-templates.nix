@@ -343,6 +343,10 @@
 
         octave-matlab = matlab-octave;
 
+        node-js = node;
+        nodejs = node;
+        node = ./node;
+
         python = {
           path = ./python;
           description = "Python development enviroment";

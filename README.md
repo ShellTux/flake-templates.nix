@@ -26,12 +26,13 @@ nix flake new --template github:ShellTux/flake-templates.nix#<ENV> <PROJECT_NAME
 | [C]/[C++]                        | [`c-cpp`](./c-cpp/)                   |
 | [C]/[C++]/[Rust]                 | [`c-cpp-rust`](./c-cpp-rust/)         |
 | Empty (change at will)           | [`empty`](./empty)                    |
-| [Haskell]                        | [`haskell`](./haskell)                |
 | [Go]                             | [`go`](./go/)                         |
+| [Haskell]                        | [`haskell`](./haskell)                |
 | [Java]                           | [`java`](./java/)                     |
 | [LaTeX]                          | [`latex`](./latex/)                   |
 | [MATLAB]                         | [`matlab`](./matlab/)                 |
 | [MATLAB/Octave]                  | [`matlab-octave`](./matlab-octave/)   |
+| [Node.js]                        | [`node`](./node)                      |
 | [Octave]                         | [`octave`](./octave/)                 |
 | [Python]                         | [`python`](./python/)                 |
 | [Rust]                           | [`rust`](./rust/)                     |
