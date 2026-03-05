@@ -1,10 +1,17 @@
 {
   description = "A Nix-flake-based Node.js development environment";
 
-  inputs.nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+    nixpkgs-stable.url = "github:nixos/nixpkgs?ref=nixos-25.11";
+  };
 
   outputs =
-    { self, nixpkgs }@inputs:
+    {
+      self,
+      nixpkgs,
+      nixpkgs-stable,
+    }@inputs:
     let
       supportedSystems = [
         "x86_64-linux"
@@ -22,6 +29,11 @@
               inherit system;
               overlays = [ inputs.self.overlays.default ];
             };
+
+            pkgs-stable = import nixpkgs-stable {
+              inherit system;
+              overlays = [ inputs.self.overlays.default ];
+            };
           }
         );
     in
@@ -32,7 +44,7 @@
       };
 
       devShells = forEachSupportedSystem (
-        { pkgs }:
+        { pkgs, pkgs-stable }:
         let
           inherit (pkgs) mkShellNoCC;
           inherit (pkgs.lib) getExe;
@@ -42,9 +54,10 @@
         {
           default = mkShellNoCC {
             packages = [
-              pkgs.node2nix
+              pkgs-stable.node2nix
               pkgs.nodejs
               pkgs.nodePackages.pnpm
+              pkgs-stable.nodePackages."@angular/cli"
               pkgs.yarn
             ];
 
