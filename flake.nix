@@ -345,7 +345,16 @@
 
         node-js = node;
         nodejs = node;
-        node = ./node;
+        node = {
+          path = ./node;
+          description = "Node.js development enviroment";
+          welcomeText = ''
+            # Node.js Development environment
+
+            ## More info
+              - [Node.js](https://nodejs.org/)
+          '';
+        };
 
         python = {
           path = ./python;
